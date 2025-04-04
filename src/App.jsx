@@ -1,13 +1,13 @@
 import './App.css'
 import SearchIcon from './assets/search.svg'
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MovieCard from "./moviecard";
-
+import MovieDetail from "./MovieDetail";
 
 const APIURl = `http://www.omdbapi.com/?i=tt3896198&apikey=c8b48bf`
 
-export default function App() {
-
+function SearchPage() {
     const [movies, setMovies] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -16,13 +16,17 @@ export default function App() {
         const data = await response.json();
         setMovies(data.Search);
     }
-    useEffect(() =>{movieSearch('spiderman')},[]);
+    
+    useEffect(() => {
+        movieSearch('spiderman');
+    }, []);
 
     const handleKeyPress = () => {
-            movieSearch(searchTerm);
-            setSearchTerm("");
+        movieSearch(searchTerm);
+        setSearchTerm("");
     };
-    return(
+    
+    return (
         <div className="app">
             <h1>Movies</h1>
             <div className="search">
@@ -32,15 +36,15 @@ export default function App() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && searchTerm.trim().length > 0) {
-                          handleKeyPress();
+                            handleKeyPress();
                         }
-                        }}
-                    />
+                    }}
+                />
                 <img 
-                src={SearchIcon}
-                alt="search"
-                onClick={() => movieSearch(searchTerm)}/>
-
+                    src={SearchIcon}
+                    alt="search"
+                    onClick={() => movieSearch(searchTerm)}
+                />
             </div>
             <div className="container">
                 {
@@ -52,12 +56,19 @@ export default function App() {
                         </div>
                     )
                 }
-            </div> 
-
-
-
-
-
-        </ div>
-    )
+            </div>
+        </div>
+    );
 }
+
+export default function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<SearchPage />} />
+                <Route path="/movie/:id" element={<MovieDetail />} />
+            </Routes>
+        </Router>
+    );
+}
+
