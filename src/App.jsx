@@ -18,6 +18,10 @@ export default function App() {
     }
     useEffect(() =>{movieSearch('spiderman')},[]);
 
+    const handleKeyPress = () => {
+            movieSearch(searchTerm);
+            setSearchTerm("");
+    };
     return(
         <div className="app">
             <h1>Movies</h1>
@@ -26,6 +30,11 @@ export default function App() {
                     placeholder="search for movies"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && searchTerm.trim().length > 0) {
+                          handleKeyPress();
+                        }
+                        }}
                     />
                 <img 
                 src={SearchIcon}
